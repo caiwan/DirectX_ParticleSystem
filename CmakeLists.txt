@@ -1,0 +1,15 @@
+# GK2 root project
+# caiwan/IR
+
+cmake_minimum_required (VERSION 2.6)
+
+project (DirectX_Particles)
+    
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+include (${CMAKE_CURRENT_SOURCE_DIR}/cmake/assign_source_group.cmake)
+include (${CMAKE_CURRENT_SOURCE_DIR}/cmake/msvc_add_pch.cmake)
+include (${CMAKE_CURRENT_SOURCE_DIR}/cmake/msvc_set_win32.cmake)
+include (${CMAKE_CURRENT_SOURCE_DIR}/cmake/copy_static_files.cmake)
+
+add_subdirectory(Source)

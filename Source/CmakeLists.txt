@@ -1,0 +1,16 @@
+
+set(_application Particles)
+
+file(GLOB_RECURSE SOURCE_FILES *.cpp *.c *.inl)
+file(GLOB_RECURSE HEADER_FILES *.h *.hpp *.inc)
+
+include_directories("${CMAKE_SOURCE_DIR}")
+
+add_executable(${_application} ${SOURCE_FILES} ${HEADER_FILES})
+
+target_include_directories(${_application} PUBLIC include)
+
+msvc_set_win32(${_application})
+
+assign_source_group("${SOURCE_FILES}")
+assign_source_group("${HEADER_FILES}")

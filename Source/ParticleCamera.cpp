@@ -1,5 +1,7 @@
 #include "ParticleCamera.h"
 
+using namespace DirectX;
+
 ParticleCamera::ParticleCamera(int screenWidth, int screenHeight) : _screenWidth(screenWidth), _screenHeight(screenHeight), _scaleFactor(71){
 	_aspectRatio	= static_cast<float>(screenWidth)/static_cast<float>(screenHeight);
 	_attractor		= XMFLOAT3(0,0,0); 

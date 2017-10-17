@@ -5,7 +5,7 @@
 
 class ParticleCamera : public CameraClass{
 private:
-	XMFLOAT3	_attractor;
+	DirectX::XMFLOAT3	_attractor;
 	int			_screenHeight, _screenWidth;
 	float		_aspectRatio, _scaleFactor;
 
@@ -14,7 +14,7 @@ public:
 	virtual ~ParticleCamera();
 
 	void renderFreeLookCamera(int mouseXabsolute, int mouseYabsolute, int mouseZabsolute);
-	XMFLOAT3 getAttractor();
+	DirectX::XMFLOAT3 getAttractor();
 
 	int getScreenHeight();
 	int getScreenWidth();

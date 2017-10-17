@@ -1,10 +1,12 @@
 #include "CSGravity.h"
 #include "D3D11Init.h"
 #include <D3Dcompiler.h>
-#include <xnamath.h>
+#include <DirectXMath.h>
 #include <cmath>
 
-CSGravity::CSGravity(char* csFilePath, int maxParticles) : _computeShader(), _ParticleBuffer(),
+using namespace DirectX;
+
+CSGravity::CSGravity(LPCWSTR csFilePath, int maxParticles) : _computeShader(), _ParticleBuffer(),
 		_ParticleBufferView(), _cbConstantVariables(), _cbDynamicVariables(), _csFilePath(csFilePath){
 	_numThreads = 1024; //Defined in the compute shader
 }

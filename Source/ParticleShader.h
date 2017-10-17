@@ -2,20 +2,19 @@
 #define _PARTICLESHADER_
 
 #include <Windows.h>
-#include <xnamath.h>
+#include <DirectXMath.h>
 #include <D3D11.h>
-#include <D3DX11.h>
 
 class ParticleShader{
 
 	struct viewMatrixBuffer{
-		XMFLOAT3	camPosition;
-		XMMATRIX	viewMatrix;
+		DirectX::XMFLOAT3	camPosition;
+		DirectX::XMMATRIX	viewMatrix;
 	};
 
 	struct constantResourcesBuffer{
 		float		quadLength;
-		XMMATRIX	projMatrix;
+		DirectX::XMMATRIX	projMatrix;
 	};
 	
 	struct timeBuffer{
@@ -36,9 +35,9 @@ public:
 	~ParticleShader();
 
 
-	bool initializeShader(ID3D11Device* device, const XMMATRIX& projMatrix, float quadLength);
+	bool initializeShader(ID3D11Device* device, const DirectX::XMMATRIX& projMatrix, float quadLength);
 	bool setUpShader(ID3D11DeviceContext* devContext);
-	void updateShader(ID3D11DeviceContext* devContext, const XMMATRIX& viewMatrix, const XMFLOAT3& camPosition, const float time);
+	void updateShader(ID3D11DeviceContext* devContext, const DirectX::XMMATRIX& viewMatrix, const DirectX::XMFLOAT3& camPosition, const float time);
 
 	void unload();
 };

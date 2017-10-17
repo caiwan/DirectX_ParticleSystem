@@ -2,6 +2,8 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
+using namespace DirectX;
+
 CameraClass::CameraClass() : _roll(0), _pitch(0), _yaw(0), _amountX(0), _amountY(0), _amountZ(0),
 							 _amountPitch(0), _amountYaw(0), _amountRoll(0), _viewMatrix(){
 	_position = XMFLOAT3(0,0,0);

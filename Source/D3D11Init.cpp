@@ -1,6 +1,8 @@
 #include "D3D11Init.h"
 #include <D3Dcompiler.h>
 
+#define DXTRACE_MSG(x)
+
 D3D11Init::D3D11Init() : _device(0), _devContext(0), _backBufferTarget(0), _swapChain(0), 
 					_hWnd(0), _hInstance(0), _depthStencilView(), _depthTexture(){}
 
@@ -27,8 +29,8 @@ bool D3D11Init::initialize(HINSTANCE hInstance, HWND hWnd, bool enableDepthBuffe
 	unsigned int totalDriverTypes = ARRAYSIZE(driverType);
 
 	D3D_FEATURE_LEVEL featureLevels[]={
-		D3D_FEATURE_LEVEL_11_0,
-		D3D_FEATURE_LEVEL_10_1,
+		//D3D_FEATURE_LEVEL_11_0,
+		//D3D_FEATURE_LEVEL_10_1,
 		D3D_FEATURE_LEVEL_10_0
 	};
 
@@ -52,8 +54,14 @@ bool D3D11Init::initialize(HINSTANCE hInstance, HWND hWnd, bool enableDepthBuffe
 
 	HRESULT result;
 	
+
+	DWORD deviceCreationFlags = 0;
+#ifdef _DEBUG
+	deviceCreationFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
+
 	for(unsigned int driver = 0; driver < totalDriverTypes; ++driver){
-		result = D3D11CreateDeviceAndSwapChain(0, driverType[driver], 0, 0, featureLevels, totalFeatureLevels, D3D11_SDK_VERSION, &swapChainDesc, 
+		result = D3D11CreateDeviceAndSwapChain(0, driverType[driver], 0, deviceCreationFlags, featureLevels, totalFeatureLevels, D3D11_SDK_VERSION, &swapChainDesc,
 												&_swapChain, &_device, &_featureLevel, &_devContext);
 		if(SUCCEEDED(result)){
 			_driverType = driverType[driver];
@@ -66,6 +74,39 @@ bool D3D11Init::initialize(HINSTANCE hInstance, HWND hWnd, bool enableDepthBuffe
 		DXTRACE_MSG("Failed to Create Device and SwapChain!");
 		return false;
 	}
+
+
+
+	// Create debug layer
+#ifdef _DEBUG
+	ID3D11Debug *d3dDebug = nullptr;
+	if (SUCCEEDED(_device->QueryInterface(__uuidof(ID3D11Debug), (void**)&d3dDebug)))
+	{
+		ID3D11InfoQueue *d3dInfoQueue = nullptr;
+		if (SUCCEEDED(d3dDebug->QueryInterface(__uuidof(ID3D11InfoQueue), (void**)&d3dInfoQueue)))
+		{
+
+			//d3dInfoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_WARNING, true);
+			d3dInfoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_CORRUPTION, true);
+			d3dInfoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_ERROR, true);
+
+			D3D11_MESSAGE_ID hide[] =
+			{
+				D3D11_MESSAGE_ID_SETPRIVATEDATA_CHANGINGPARAMS,
+				D3D11_MESSAGE_ID_DEVICE_DRAW_SAMPLER_NOT_SET
+			};
+
+			D3D11_INFO_QUEUE_FILTER filter;
+			memset(&filter, 0, sizeof(filter));
+			filter.DenyList.NumIDs = _countof(hide);
+			filter.DenyList.pIDList = hide;
+			d3dInfoQueue->AddStorageFilterEntries(&filter);
+			d3dInfoQueue->Release();
+		}
+		d3dDebug->Release();
+	}
+#endif
+
 
 	ID3D11Texture2D*	backBufferTexture;
 	result = _swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBufferTexture);
@@ -157,11 +198,11 @@ void D3D11Init::shutDown(){
 	_depthTexture = 0;
 }
 
-bool D3D11Init::CompileD3DShader(char* filePath, char* entry, char* shaderModel, ID3DBlob** buffer){
+bool D3D11Init::CompileD3DShader(LPCWSTR filePath, char* entry, char* shaderModel, ID3DBlob** buffer){
 	ID3DBlob*	errorBuffer = 0;
 	HRESULT		result = 0;
 
-	result = D3DX11CompileFromFile(filePath, NULL, NULL, entry, shaderModel, D3DCOMPILE_ENABLE_STRICTNESS, 0, 0, buffer, &errorBuffer, 0);
+	result = D3DCompileFromFile(filePath, NULL, NULL, entry, shaderModel, D3DCOMPILE_ENABLE_STRICTNESS, 0, buffer, &errorBuffer);
 
 	if(FAILED(result)){
 		if(errorBuffer != 0){

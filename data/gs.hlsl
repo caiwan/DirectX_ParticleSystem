@@ -18,6 +18,7 @@ struct GS_INPUT{
 struct PS_INPUT{
 	float4	pos		: SV_POSITION;
 	float2  tex0	: TEXCOORD0;
+	float3	color	: COLOR;
 };
 
 [maxvertexcount(4)]
@@ -51,8 +52,8 @@ void GS_Main(point GS_INPUT p[1], inout TriangleStream<PS_INPUT> triStream){
 	vTemp						= float4(v.xyz, 1.0f);
 	p1.pos						= mul(vTemp, projMatrix);
 	p1.tex0.x = 0.0f; p1.tex0.y = 1.0f;
-	triStream.Append(p1);*/
-	
+	triStream.Append(p1);
+	*/
 
     float3 normal			= p[0].pos - camPosition;
 	normal					= mul(normal, viewMatrix);
@@ -69,21 +70,25 @@ void GS_Main(point GS_INPUT p[1], inout TriangleStream<PS_INPUT> triStream){
     p1.pos = p[0].pos+rightVector*(quadLength)+upVector*(quadLength);
     p1.tex0 = float2(1.0f, 0.0f);
     p1.pos = mul(p1.pos, projMatrix);
+	p1.color = p[0].color;
     triStream.Append(p1);
 
     p1.pos = p[0].pos+rightVector*(quadLength)+upVector*(-quadLength);
     p1.tex0 = float2(1.0f, 1.0f);
     p1.pos = mul(p1.pos, projMatrix);
+	p1.color = p[0].color;
     triStream.Append(p1);
 
     p1.pos = p[0].pos+rightVector*(-quadLength)+upVector*(quadLength);
     p1.tex0 = float2(0.0f, 0.0f);
     p1.pos = mul(p1.pos, projMatrix);
+	p1.color = p[0].color;
     triStream.Append(p1);
 
     p1.pos = p[0].pos+rightVector*(-quadLength)+upVector*(-quadLength);
     p1.tex0 = float2(0.0f, 1.0f);
     p1.pos = mul(p1.pos, projMatrix);
+	p1.color = p[0].color;
     triStream.Append(p1);
 	
 

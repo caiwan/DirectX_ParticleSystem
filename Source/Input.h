@@ -1,14 +1,10 @@
 #ifndef _INPUT_
 #define _INPUT_
 
-#include <dinput.h>
+#include <Windows.h>
 
 class Input{
 private:
-	IDirectInputDevice8*	_DIKeyboard;
-	IDirectInputDevice8*	_DIMouse;
-
-	LPDIRECTINPUT8			_directInput;
 
 	LONG					_mouseXabsolute, _mouseYabsolute, _mouseZabsolute;
 	LONG					_mouseXrelative, _mouseYrelative, _mouseZrelative;

@@ -11,7 +11,7 @@
 #include "CSGravity.h"
 #include "ParticleShader.h"
 #include "Input.h"
-#include <FW1FontWrapper.h>
+//#include <FW1FontWrapper.h>
 #include <sstream>
 
 class ParticleSystem : public D3D11Init{
@@ -30,14 +30,14 @@ private:
 	int							_maxParticles;
 	bool						_drawInformation;
 
-	IFW1FontWrapper*			_fontWrapper;
+	//IFW1FontWrapper*			_fontWrapper;
 	std::wstring				_fps;
 
 	Input*						_input;
 
 public:
 
-	ParticleSystem(Input* input, char* csFilePath, float quadLength, float velocityTranslate, float velocityRotate, int maxParticles);
+	ParticleSystem(Input* input, LPCWSTR csFilePath, float quadLength, float velocityTranslate, float velocityRotate, int maxParticles);
 	virtual ~ParticleSystem();
 
 	bool initialize(HINSTANCE hInstance, HWND hWnd, int screenWidth, int screenHeight, int initRadius, bool enableDepthBuffer, bool windowed);
@@ -47,7 +47,9 @@ public:
 
 	void setFPSToDraw(int fps);
 
+
 private:
+	HRESULT loadTexture(LPCWSTR name, ID3D11ShaderResourceView *& _out);
 	bool loadContent(int screenWidth, int screenHeight, int initRadius);
 	bool unloadContent();
 
